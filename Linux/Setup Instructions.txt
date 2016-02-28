@@ -1,0 +1,25 @@
+#Expand filesystem
+
+sudo apt-get update && sudo apt-get install fbi python3-rpi.gpio python3-gpiozero python3-pyside htop python3-kivy
+
+#Disable screen blanking
+http://raspberrypi.stackexchange.com/questions/2059/disable-screen-blanking-in-x-windows-on-raspbian
+
+#Edit /boot/cmdline.txt and add "quiet" to the end
+#Follow instructions in Splash Instructions.txt
+
+sudo apt-get remove  \
+bluej claws-mail claws-mail-i18n dillo greenfoot libreoffice \
+libreoffice-avmedia-backend-gstreamer libreoffice-base libreoffice-base-core \
+libreoffice-base-drivers libreoffice-calc libreoffice-common \
+libreoffice-core libreoffice-draw libreoffice-gtk libreoffice-impress \
+libreoffice-java-common libreoffice-math libreoffice-report-builder-bin \
+libreoffice-sdbc-hsqldb libreoffice-style-galaxy libreoffice-writer \
+minecraft-pi netsurf-common netsurf-gtk nuscratch python-minecraftpi \
+python3-minecraftpi python3-uno scratch sonic-pi squeak-plugins-scratch \
+squeak-vm wolfram-engine
+
+sudo apt-get autoremove
+
+sudo nano /etc/xdg/lxsession/LXDE/autostart
+https://www.danpurdy.co.uk/web-development/raspberry-pi-kiosk-screen-tutorial/
