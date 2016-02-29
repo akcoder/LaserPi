@@ -1,4 +1,3 @@
-import sys
 from PySide import QtCore
 
 class MainViewModel(QtCore.QObject):
@@ -16,20 +15,7 @@ class MainViewModel(QtCore.QObject):
 
     @QtCore.Slot()
     def shutdown(self):
-        if sys.platform == "linux":
-            try:
-                command = "/usr/bin/sudo /sbin/shutdown --reboot now"
-                import subprocess
-                process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-                output = process.communicate()[0]
-                print(output)
-            except Exception as ex:
-                print(ex)
-                print("Unable to shutdown")
-                sys.exit()
-        else:
-            sys.exit()
-
+        self.onShutdownClicked.emit()
 
     @QtCore.Slot()
     def toggle_exhaust(self):
@@ -74,26 +60,14 @@ class MainViewModel(QtCore.QObject):
         self.__air_on = value
         self.onAirChanged.emit()
 
-    @QtCore.Signal
-    def onWorkingChanged(self):
-        pass
+    onWorkingChanged = QtCore.Signal()
+    onChillerChanged = QtCore.Signal()
+    onExhaustChanged = QtCore.Signal()
+    onAirChanged = QtCore.Signal()
+    
+    onExitClicked = QtCore.Signal()
+    onShutdownClicked = QtCore.Signal()
 
-    @QtCore.Signal
-    def onChillerChanged(self):
-        pass
-
-    @QtCore.Signal
-    def onExhaustChanged(self):
-        pass
-
-    @QtCore.Signal
-    def onAirChanged(self):
-        pass
-
-    @QtCore.Signal
-    def onExitClicked(self):
-        pass
- 
     chiller = QtCore.Property(bool, __get_chiller_on, __set_chiller_on, notify=onChillerChanged)
     exhaust = QtCore.Property(bool, _get_exhaust_on, __set_exhaust_on, notify=onExhaustChanged)
     air = QtCore.Property(bool, __get_air_on, __set_air_on, notify=onAirChanged)

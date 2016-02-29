@@ -20,6 +20,7 @@ class Controller(QtCore.QObject):
         self.__view_model.onAirChanged.connect(self.air_trigger_changed)
         self.__view_model.onExhaustChanged.connect(self.exhaust_changed)
         self.__view_model.onExitClicked.connect(self.close)
+        self.__view_model.onShutdownClicked.connect(self.shutdown)
 
         self._states = {
             Pins.working:GPIO.LOW,
@@ -55,6 +56,21 @@ class Controller(QtCore.QObject):
     def close(self):
         self.cleanup()
         QtCore.QCoreApplication.instance().quit()
+
+    def shutdown(self):
+        if sys.platform == "linux":
+            try:
+                command = "/usr/bin/sudo /sbin/shutdown --halt now"
+                import subprocess
+                process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+                output = process.communicate()[0]
+                print(output)
+            except Exception as ex:
+                print(ex)
+                print("Unable to shutdown")
+                sys.exit()
+        else:
+            sys.exit()
 
     def cleanup(self):
         if sys.platform == 'linux' and self.__gpio_setup:
