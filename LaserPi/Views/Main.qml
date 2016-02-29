@@ -5,7 +5,7 @@ Rectangle {
     id: window
     width: 800
     height: 480
-    color: "green"
+    color: "black"
 
     Column {
         spacing: 5
@@ -108,6 +108,15 @@ Rectangle {
 		anchors.rightMargin: 10
 		label: "Shutdown"
         onClicked: viewModel.shutdown()
+	}
+
+	Button {
+		anchors.bottom: parent.bottom
+		anchors.bottomMargin: 10
+		anchors.left: parent.left
+		anchors.leftMargin: 10
+		label: "Exit"
+        onClicked: viewModel.exit()
 	}
 
 	Item {

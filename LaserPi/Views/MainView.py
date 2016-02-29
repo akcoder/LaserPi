@@ -1,5 +1,5 @@
 from PySide.QtDeclarative import QDeclarativeView
-from PySide.QtCore import QUrl
+from PySide.QtCore import QUrl, Qt
 
 class MainView(QDeclarativeView):
     """Main view"""
@@ -11,5 +11,4 @@ class MainView(QDeclarativeView):
         # Set the QML file and show
         url = QUrl('Views/Main.qml')
         self.setSource(url)
-
-
+        self.setCursor(Qt.BlankCursor)

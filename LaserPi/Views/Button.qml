@@ -6,8 +6,6 @@ Rectangle {
 
     property string label: "Button"
 	property color buttonColor: activePalette.light
-	property color hoverColor: activePalette.midlight
-	property color borderColor: "white"
 
     signal clicked
 
@@ -20,8 +18,6 @@ Rectangle {
     smooth: true
     border { width: 1; color: Qt.darker(activePalette.button) }
     radius: 8
-
-    color: mouseArea.pressed ? Qt.darker(buttonColor, 1.5) : buttonColor
 
     gradient: Gradient {
         GradientStop {
@@ -49,9 +45,6 @@ Rectangle {
 		id: mouseArea;
 		anchors.fill: parent;
 		hoverEnabled: true
-
-		//onEntered: parent.border.color = hoverColor
-        //onExited:  parent.border.color = borderColor
 
 		onClicked: parent.clicked()
 	}

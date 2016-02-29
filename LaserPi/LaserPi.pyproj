@@ -29,6 +29,7 @@
     <Compile Include="Pins.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="pintest.py" />
     <Compile Include="ViewModel\MainViewModel.py">
       <SubType>Code</SubType>
     </Compile>
@@ -45,6 +46,7 @@
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="pylintrc" />
     <Content Include="run.sh" />
     <Content Include="Views\Button.qml">
       <SubType>Code</SubType>

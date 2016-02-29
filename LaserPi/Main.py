@@ -1,36 +1,30 @@
-import sys, signal
-from PySide.QtCore import QTimer
+"""Main"""
+import sys
+import signal
 from PySide.QtGui import QApplication
+#from PySide.QtCore import Qt
 
 from ViewModel import MainViewModel
 from Controller import Controller
-from Pins import Pins
 from Views import MainView
 
-def sigint_handler(signum, frame):
-    print('You pressed Ctrl+C!')
-    QApplication.quit()
-    sys.exit()
-
 def main():
-    signal.signal(signal.SIGINT, sigint_handler)
+    """Main"""
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     # Create Qt application and the QDeclarative view
     app = QApplication(sys.argv)
+    #app.setOverrideCursor(Qt.BlankCursor)
 
-    timer = QTimer()
-    timer.start(500)  # You may change this if you wish.
-    timer.timeout.connect(lambda: None)  # Let the interpreter run each 500 ms.
+    view_model = MainViewModel()
+    controller = Controller(view_model)
 
-    viewModel = MainViewModel()
-    controller = Controller(viewModel)
+    main_view = MainView(view_model)
 
-    mainView = MainView(viewModel)
-
-    if (sys.platform == 'win32'):
-        mainView.show()
+    if sys.platform == 'win32':
+        main_view.show()
     else:
-        mainView.showFullScreen()
+        main_view.showFullScreen()
 
     sys.exit(app.exec_())
     

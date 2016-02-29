@@ -2,9 +2,11 @@ from enum import IntEnum
 
 class Pins(IntEnum):
     """Constant for GPIO pins used"""
-    led = 5
+    #Inputs
+    working = 23
+    airTrigger = 24
+
+    #Outputs
     chiller = 6
-    working = 25
-    airTrigger = 13
-    airOutput = 99
+    airOutput = 13
     exhaust = 5

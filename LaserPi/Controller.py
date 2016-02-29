@@ -1,3 +1,5 @@
+"""The glue between the view and viewModel"""
+
 import sys
 from threading import Thread, Timer
 from PySide import QtCore
@@ -8,78 +10,111 @@ if sys.platform == 'linux':
     import RPi.GPIO as GPIO
 
 class Controller(QtCore.QObject):
+    """The glue between the view and viewModel"""
     def __init__(self, viewModel: MainViewModel):
         QtCore.QObject.__init__(self)
-        self.__viewModel = viewModel
-        self.__gpioSetup = False
-        self.__exhaustTimer = None
-        self.__viewModel.chillerChanged.connect(self.chiller_changed)
-        self.__viewModel.airChanged.connect(self.air_changed)
+        self.__view_model = viewModel
+        self.__gpio_setup = False
+        self.__exhaust_timer = None
+        self.__view_model.onChillerChanged.connect(self.chiller_changed)
+        self.__view_model.onAirChanged.connect(self.air_trigger_changed)
+        self.__view_model.onExhaustChanged.connect(self.exhaust_changed)
+        self.__view_model.onExitClicked.connect(self.close)
+
+        self._states = {
+            Pins.working:GPIO.LOW,
+            Pins.airTrigger:GPIO.LOW
+            }
 
         if sys.platform == 'linux':
             self.running = 1
-            self.__thread = Thread(target=self.__setupGpio)
+            self.__thread = Thread(target=self.__setup_gpio)
             self.__thread.setDaemon(1)
             self.__thread.start()
 
     def __del__(self):
         print('Destructor called, cleaning up')
-        if sys.platform == 'linux' and self.__gpioSetup:
-            GPIO.cleanup()
+        self.cleanup()
 
-    def __setupGpio(self):
+    def __setup_gpio(self):
         print("Setting up GPIO")
         GPIO.setmode(GPIO.BCM)
 
         GPIO.setup(Pins.exhaust, GPIO.OUT)
         GPIO.setup(Pins.chiller, GPIO.OUT)
-        #GPIO.setup(Pins.airOutput, GPIO.OUT)
+        GPIO.setup(Pins.airOutput, GPIO.OUT)
 
-        GPIO.setup(Pins.working, GPIO.IN)
+        GPIO.setup(Pins.working, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(Pins.working, GPIO.BOTH, callback=self.working_changed)
-        print("GPIO {0} state? {1}".format(Pins.working, GPIO.input(Pins.working)))
 
-        self.__gpioSetup = True
+        GPIO.setup(Pins.airTrigger, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.add_event_detect(Pins.airTrigger, GPIO.BOTH, callback=self.air_trigger_changed)
+
+        self.__gpio_setup = True
+
+    def close(self):
+        self.cleanup()
+        QtCore.QCoreApplication.instance().quit()
+
+    def cleanup(self):
+        if sys.platform == 'linux' and self.__gpio_setup:
+            GPIO.cleanup()
+
+    @QtCore.Slot()
+    def air_trigger_changed(self, channel=None):
+        if channel is None:
+            self.set_air_state(GPIO.HIGH if self.__view_model.air else GPIO.LOW)
+            return
+        #self.__viewModel.air = not self.__viewModel.air
+        print('air changed')
+
+    def set_air_state(self, state):
+        print("Setting airOutput GPIO {0} to {1}".format(Pins.airOutput, "HIGH" if self.__view_model.air else "LOW"))
+        
+        GPIO.output(Pins.airOutput, state)
 
     def working_changed(self, channel):
-        isHigh = GPIO.input(channel) == GPIO.HIGH
+        if  GPIO.input(channel) == GPIO.HIGH:
+            if  self._states[channel] == GPIO.LOW:
+                print("Laser is working")
+                self.__view_model.working = True
+                self.turn_exhaust_on()
 
-        if (isHigh):
-            print("Laser is working")
-            self.__viewModel.working = True
-            self.turn_exhaust_on()
-            if (self.__exhaustTimer is not None):
-                self.__exhaustTimer.cancel()
-                self.__exhaustTimer = None
-        elif self.__viewModel.exhaust:
-            print("timer is null? {0}".format(self.__exhaustTimer is None))
-            if (self.__exhaustTimer is None):
+                if self.__exhaust_timer is not None:
+                    self.__exhaust_timer.cancel()
+                    self.__exhaust_timer = None
+
+            self._states[channel] = GPIO.HIGH
+        elif self._states[channel] == GPIO.HIGH:
+            if self.__view_model.exhaust:
+                assert self.__exhaust_timer is None, "Exhaust timer should have been set to null!"
+
                 print("Starting exhaust off timer")
-                self.__exhaustTimer = Timer(1, self.turn_exhaust_off)
-                self.__exhaustTimer.start()
-                self.__viewModel.working = False
+                self.__exhaust_timer = Timer(1, self.turn_exhaust_off)
+                self.__exhaust_timer.start()
+                self.__view_model.working = False
+            self._states[channel] = GPIO.LOW
                 
     def turn_exhaust_on(self):
         print("Turning exhaust fan on")
-        self.__viewModel.exhaust = True
+        self.__view_model.exhaust = True
         GPIO.output(Pins.exhaust, GPIO.HIGH)
 
     def turn_exhaust_off(self):
         print("Turning exhaust fan off")
-        self.__viewModel.exhaust = False
-        self.__exhaustTimer = None
+        self.__view_model.exhaust = False
+        self.__exhaust_timer = None
         GPIO.output(Pins.exhaust, GPIO.LOW)
 
     @QtCore.Slot()
     def chiller_changed(self):
-        GPIO.output(Pins.chiller, GPIO.HIGH if self.__viewModel.chiller else GPIO.LOW)
-        print("Setting chiller GPIO {0} to {1}".format(Pins.chiller, "HIGH" if self.__viewModel.chiller else "LOW"))
+        if sys.platform == 'linux':
+            GPIO.output(Pins.chiller, GPIO.HIGH if self.__view_model.chiller else GPIO.LOW)
+            print("Setting chiller GPIO {0} to {1}".format(Pins.chiller, "HIGH" if self.__view_model.chiller else "LOW"))
 
     @QtCore.Slot()
-    def air_changed(self):
-        #self.__viewModel.air = not self.__viewModel.air
-        print('air changed');
-        #self._set_exhaustOn(not self._get_exhaustOn())
-            #thread = threading.Thread(target=self._download)
-            #thread.start()
+    def exhaust_changed(self):
+        if sys.platform == 'linux':
+            GPIO.output(Pins.exhaust, GPIO.HIGH if self.__view_model.exhaust else GPIO.LOW)
+            print("Setting exhaust GPIO {0} to {1}".format(Pins.exhaust, "HIGH" if self.__view_model.exhaust else "LOW"))
 
