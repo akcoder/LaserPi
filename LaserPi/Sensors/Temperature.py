@@ -7,8 +7,8 @@ class Temperature(object):
     """Reads temperature data"""
 
     __base_dir = '/sys/bus/w1/devices/'
-    __sensors = Settings().get('sensors', 'temperature')
-    __units = Settings().get('units', 'temperature')
+    __sensors = Settings.get('sensors', 'temperature')
+    __units = Settings.get('units', 'temperature')
     __mapper = {
         "metric": 0,
         "imperial": 1,
