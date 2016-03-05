@@ -1,12 +1,36 @@
 #Expand filesystem
 
-sudo apt-get update && sudo apt-get install fbi python3-rpi.gpio python3-gpiozero python3-pyside htop python3-kivy
+rm -rf Music Videos Pictures Documents Public Templates Downloads
+
+sudo -s
+localectl set-locale en_US.utf8
+echo "America/Anchorage" > /etc/timezone
+#localectl set-x11-keymap us pc105 workman
+localectl set-keymap us
+
+exit
+
+export DISPLAY=:0
+pcmanfm --set-wallpaper=/home/pi/splash.png
+
+sudo apt-get update && sudo apt-get install fbi htop dos2unix libperl4-corelibs-perl lsof python3-rpi.gpio \
+python3-pyside.qtcore python3-pyside.qtpython3-pyside.qtnetwork python3-pyside.qtscript python3-pyqtgraph
+
+#To enable visual studio debugging
+#sudo pip3 install ptvsd
 
 #Disable screen blanking
-http://raspberrypi.stackexchange.com/questions/2059/disable-screen-blanking-in-x-windows-on-raspbian
+sudo sed 's/^#xserver-command=X$/xserver-command=X -s 0 -dpms/g' /etc/lightdm/lightdm.conf
 
-#Edit /boot/cmdline.txt and add "quiet" to the end
-#Follow instructions in Splash Instructions.txt
+#1-Wire
+sudo echo "dtoverlay=w1-gpio" >> /boot/config.txt
+
+#Splash screen instructions
+sudo  sed -i 's/rootwait$/rootwait quiet/g' /boot/cmdline.txt
+#cp splash.png /home/pi/splash.png
+#cp asplashscreen to /etc/init.d/asplashscreen
+sudo chmod a+x /etc/init.d/asplashscreen
+sudo insserv /etc/init.d/asplashscreen
 
 sudo apt-get remove  \
 bluej claws-mail claws-mail-i18n dillo greenfoot libreoffice \
