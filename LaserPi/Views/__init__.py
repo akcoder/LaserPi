@@ -1,1 +1,1 @@
-from Views.MainView import MainView
+from Views.MainView import *

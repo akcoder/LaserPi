@@ -1,0 +1,12 @@
+{
+  "units": {
+    "temperature": "metric",
+    "flow": "metric"
+  },
+  "sensors": {
+    "temperature": {
+      "inlet": "28-000006094026",
+      "outlet": "28-000006087d0b"
+    }
+  }
+}

@@ -23,6 +23,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controller.py" />
+    <Compile Include="Helpers\Observer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\PerpetualTimer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\Settings.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Main.py">
       <SubType>Code</SubType>
     </Compile>
@@ -30,6 +42,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="pintest.py" />
+    <Compile Include="Sensors\FlowMeter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sensors\Temperature.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sensors\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModel\MainViewModel.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,10 +63,13 @@
     <Compile Include="Views\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helpers\" />
+    <Folder Include="Sensors\" />
     <Folder Include="ViewModel\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.json" />
     <Content Include="pylintrc" />
     <Content Include="run.sh" />
     <Content Include="Views\Button.qml">

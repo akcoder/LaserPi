@@ -5,6 +5,8 @@ class Pins(IntEnum):
     #Inputs
     working = 23
     airTrigger = 24
+    flow = 25
+    temperature = 4
 
     #Outputs
     chiller = 6
