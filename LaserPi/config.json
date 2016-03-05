@@ -8,5 +8,6 @@
       "inlet": "28-000006094026",
       "outlet": "28-000006087d0b"
     }
-  }
+  },
+  "exhaust_time_after_finished": 10
 }

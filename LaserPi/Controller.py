@@ -150,8 +150,9 @@ class Controller(Observer):
             if self.__view_model.exhaust:
                 assert self.__exhaust_timer is None, "Exhaust timer should have been set to null!"
 
-                print("Starting exhaust off timer")
-                self.__exhaust_timer = Timer(1, self.turn_exhaust_off)
+                seconds = Settings.get('exhaust_time_after_finished')
+                print("Setting exhaust off timer for %d seconds" % seconds)
+                self.__exhaust_timer = Timer(seconds, self.turn_exhaust_off)
                 self.__exhaust_timer.start()
                 self.__view_model.working = False
             self._states[channel] = GPIO.LOW
