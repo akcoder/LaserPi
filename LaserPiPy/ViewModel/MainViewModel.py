@@ -1,4 +1,5 @@
 from PySide import QtCore
+from Helpers.Settings import Settings
 
 class MainViewModel(QtCore.QObject):
     """View model for the main window"""
@@ -68,15 +69,23 @@ class MainViewModel(QtCore.QObject):
         self.onAirChanged.emit()
 
 
-    def __get_inlet_temp(self) -> float:
-        return self.__inlet_temp
+    def __get_inlet_temp(self) -> str:
+        return '{0:.1f}'.format(self.__inlet_temp)
 
     def __set_inlet_temp(self, value: float):
         self.__inlet_temp = value
         self.onInletTempChanged.emit()
 
 
-    def __get_flow_rate(self) -> float:
+    def __get_outlet_temp(self) -> str:
+        return '{0:.1f}'.format(self.__outlet_temp)
+
+    def __set_outlet_temp(self, value: float):
+        self.__outlet_temp = value
+        self.onOutletTempChanged.emit()
+
+
+    def __get_flow_rate(self) -> str:
         return self.__flow_rate
 
     def __set_flow_rate(self, value: float):
@@ -84,13 +93,9 @@ class MainViewModel(QtCore.QObject):
         self.onFlowRateChanged.emit()
 
 
-    def __get_outlet_temp(self) -> float:
-        return self.__outlet_temp
-
-    def __set_outlet_temp(self, value: float):
-        self.__outlet_temp = value
-        self.onOutletTempChanged.emit()
-
+    @QtCore.Slot(str, result=float)
+    def tempThreshold(self, key):
+        return getattr(Settings.instance.thresholds.temp, key)
 
     onWorkingChanged = QtCore.Signal()
     onChillerChanged = QtCore.Signal()
@@ -109,6 +114,6 @@ class MainViewModel(QtCore.QObject):
     air = QtCore.Property(bool, __get_air_on, __set_air_on, notify=onAirChanged)
     working = QtCore.Property(bool, __get_is_working, __set_is_working, notify=onWorkingChanged)
 
-    inlet_temp = QtCore.Property(float, __get_inlet_temp, __set_inlet_temp, notify=onInletTempChanged)
-    outlet_temp = QtCore.Property(float, __get_outlet_temp, __set_outlet_temp, notify=onOutletTempChanged)
-    flow_rate = QtCore.Property(float, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)
+    inlet_temp = QtCore.Property(str, __get_inlet_temp, __set_inlet_temp, notify=onInletTempChanged)
+    outlet_temp = QtCore.Property(str, __get_outlet_temp, __set_outlet_temp, notify=onOutletTempChanged)
+    flow_rate = QtCore.Property(str, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)

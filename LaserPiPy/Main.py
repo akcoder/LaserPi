@@ -5,12 +5,11 @@ import signal
 #ptvsd.enable_attach('laserpi')
 
 from PySide.QtGui import QApplication
-#from PySide.QtCore import Qt
 
 from ViewModel import MainViewModel
-from Controller import Controller
 from Views import MainView
-from ViewModel import MainViewModel
+from Controller import Controller
+from Helpers.Settings import Settings
 
 def main():
     """Main"""

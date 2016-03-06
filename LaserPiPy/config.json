@@ -9,6 +9,12 @@
       "outlet": "28-000006087d0b"
     }
   },
+  "thresholds": {
+    "temp": {
+      "danger": 25,
+      "warning": 20
+    }
+  },
   "pins": {
     "input": {
       "working": 23,

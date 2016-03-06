@@ -13,6 +13,18 @@ Rectangle {
     property int column2_2Width: 50
 	property int buttonWidth: 75
 
+	function getTempColor(value) {
+		if (value >= viewModel.tempThreshold("danger")) {
+			return 'red';
+		}
+
+		if (value >= viewModel.tempThreshold("warning")) {
+			return 'yellow'
+		}
+
+		return 'green';
+	}
+
     Column {
         spacing: 5
         //anchors.fill: parent
@@ -108,6 +120,7 @@ Rectangle {
 
 			Label {
 				id: timeText
+				width: 225
                 //height: parent.height
 				text: Qt.formatDateTime(new Date(), "h:mm AP MMM d, yyyy")
 			}
@@ -136,7 +149,8 @@ Rectangle {
             }
 
             Label {
-                text: [viewModel.inlet_temp, "°"].join(' ')
+                text: viewModel.inlet_temp
+				color: getTempColor(viewModel.inlet_temp)
                 height: parent.height
                 width: column2_2Width
                 verticalAlignment: Text.AlignVCenter
@@ -156,7 +170,8 @@ Rectangle {
             }
 
             Label {
-                text: [viewModel.outlet_temp, "°"].join(' ')
+                text: viewModel.outlet_temp
+				color: getTempColor(viewModel.outlet_temp)
                 height: parent.height
                 width: column2_2Width
                 verticalAlignment: Text.AlignVCenter
@@ -183,7 +198,6 @@ Rectangle {
             }
 		}
 	}
-
 
 	Button {
 		anchors.bottom: parent.bottom

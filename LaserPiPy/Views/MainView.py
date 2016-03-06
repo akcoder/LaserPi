@@ -1,11 +1,13 @@
 import sys
 from PySide.QtDeclarative import QDeclarativeView
 from PySide.QtCore import QUrl, Qt
+from ViewModel.MainViewModel import MainViewModel
+from Helpers.Settings import Settings
 
 class MainView(QDeclarativeView):
     """Main view"""
 
-    def __init__(self, viewModel):
+    def __init__(self, viewModel: MainViewModel):
         super().__init__()
         self.rootContext().setContextProperty('viewModel', viewModel)
 
