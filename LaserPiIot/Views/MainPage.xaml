@@ -1,0 +1,77 @@
+﻿<Page
+    x:Class="LaserPi.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LaserPi.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Width="800"
+    Height="480"
+    DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25" />
+            <Setter Property="Margin" Value="2,0,5,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="25" />
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Page.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" MinWidth="200">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Status" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Working" Grid.Row="1" Grid.Column="0"/>
+                <TextBlock Text="{Binding IsWorking, Converter={StaticResource boolToOnOff}}" Grid.Row="1" Grid.Column="1"/>
+
+                <TextBlock Text="Chiller" Grid.Row="2" Grid.Column="0"/>
+                <Button Grid.Row="2" Grid.Column="1" Command="{Binding ToggleChillerCommand}" Content="{Binding ChillerOn, Converter={StaticResource boolToOnOff}}"/>
+
+                <TextBlock Text="Air Assist" Grid.Row="3" Grid.Column="0"/>
+                <Button Grid.Row="3" Grid.Column="1" Command="{Binding ToggleAirCommand}" Content="{Binding AirOn, Converter={StaticResource boolToOnOff}}"/>
+
+                <TextBlock Text="Exhaust" Grid.Row="4" Grid.Column="0"/>
+                <Button Grid.Row="4" Grid.Column="1" Command="{Binding ToggleExhaustCommand}" Content="{Binding ExhaustOn, Converter={StaticResource boolToOnOff}}"/>
+            </Grid>
+
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                <TextBlock Text="{Binding Time}"/>
+                <TextBlock Text="{Binding Date}"/>
+            </StackPanel>
+        </Grid>
+
+        <Ellipse x:Name="LED" Fill="LightGray" Stroke="White" Width="50" Height="50" Margin="10"/>
+
+        <TextBox x:Name="status" Text="Status" Margin="10" IsReadOnly="True"/>
+        <Button x:Name="LedOn" Content="On"  Margin="10" HorizontalAlignment="Center"
+                Click="LedOnClicked"/>
+        <Button x:Name="LedOff" Content="Off"  Margin="10" HorizontalAlignment="Center"
+                Click="LedOffClicked"/>
+    </StackPanel>
+</Page>

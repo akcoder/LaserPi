@@ -1,2 +1,5 @@
 __pycache__
 .vs/
+/LaserPiIot/obj
+/LaserPiIot/bin
+/LaserPiIot/packages
