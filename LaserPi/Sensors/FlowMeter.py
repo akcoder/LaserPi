@@ -5,7 +5,7 @@ if sys.platform == 'linux':
     import RPi.GPIO as GPIO
 
 class FlowMeter(object):
-    """description of class"""
+    """Flow Meter"""
     def __init__(self):
         self.__count = 0
         self.__time_start = time.time()
@@ -18,8 +18,8 @@ class FlowMeter(object):
         self.__time_delta = (time.time() - self.__time_start)    
 
         if self.__time_delta >= 10.0:
-            flow=int(self.__count / 75)
-            flow=str(flow)
+            flow = int(self.__count / 75)
+            flow = str(flow)
             self.__count = 0
             self.__time_delta = 0
             self.__time_start = time.time()

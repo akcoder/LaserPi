@@ -7,8 +7,8 @@ class Temperature(object):
     """Reads temperature data"""
 
     __base_dir = '/sys/bus/w1/devices/'
-    __sensors = Settings.get('sensors', 'temperature')
-    __units = Settings.get('units', 'temperature')
+    __sensors = Settings.instance.sensors.temperature
+    __units = Settings.instance.units.temperature
     __mapper = {
         "metric": 0,
         "imperial": 1,
@@ -16,10 +16,11 @@ class Temperature(object):
     }
 
     def __init__(self, **kwargs):
-        self.__sensor_temp = {}
+        self.__temp_sensors = {}
+
         #Set all the temp values to -255 so we can do change detection
-        for k,v in self.__sensors.items():
-            self.__sensor_temp[k] = -255
+        for key in self.__sensors._fields:
+            self.__temp_sensors[key] = -255
 
     def start(self) -> None:
         self.__sensor_timer = PerpetualTimer(0.25, self.__poll_sensors)
@@ -31,16 +32,16 @@ class Temperature(object):
             self.__sensor_timer.cancel()
 
     def __poll_sensors(self) -> None:
-        for key,v in self.__sensors.items():
+        for key in self.__sensors._fields:
             temp = self.read(key)
 
-            if temp != self.__sensor_temp[key]:
-                self.__sensor_temp[key] = temp
+            if temp != self.__temp_sensors[key]:
+                self.__temp_sensors[key] = temp
                 Event('temp_changed', key, temp)
 
     def read(self, name: str) -> float:
         index = self.__mapper.get(self.__units)
-        temp = self.__read_temp(self.__sensors[name])[index]
+        temp = self.__read_temp(getattr(self.__sensors, name))[index]
 
         if temp is not None:
             return round(temp, 1)

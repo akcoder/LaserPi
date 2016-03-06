@@ -38,9 +38,6 @@
     <Compile Include="Main.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Pins.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="pintest.py" />
     <Compile Include="Sensors\FlowMeter.py">
       <SubType>Code</SubType>

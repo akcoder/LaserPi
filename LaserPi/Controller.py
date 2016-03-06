@@ -5,7 +5,6 @@ import sys
 from threading import Thread, Timer
 from PySide import QtCore
 from ViewModel import MainViewModel
-from Pins import Pins
 from Helpers import Settings
 from enum import IntEnum
 from Sensors.Temperature import Temperature
@@ -33,8 +32,8 @@ class Controller(Observer):
 
         if sys.platform == 'linux':
             self._states = {
-                Pins.working:GPIO.LOW,
-                Pins.airTrigger:GPIO.LOW
+                Settings.instance.pins.input.working:GPIO.LOW,
+                Settings.instance.pins.input.airTrigger:GPIO.LOW
                 }
 
             self.__gpio_thread = Thread(target=self.__setup_gpio)
@@ -53,15 +52,15 @@ class Controller(Observer):
         print("Setting up GPIO")
         GPIO.setmode(GPIO.BCM)
 
-        GPIO.setup(Pins.exhaust, GPIO.OUT)
-        GPIO.setup(Pins.chiller, GPIO.OUT)
-        GPIO.setup(Pins.airOutput, GPIO.OUT)
+        GPIO.setup(Settings.instance.pins.output.exhaust, GPIO.OUT)
+        GPIO.setup(Settings.instance.pins.output.chiller, GPIO.OUT)
+        GPIO.setup(Settings.instance.pins.output.airOutput, GPIO.OUT)
 
-        GPIO.setup(Pins.working, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(Pins.working, GPIO.BOTH, callback=self.working_changed, bouncetime=25)
+        GPIO.setup(Settings.instance.pins.input.working, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.add_event_detect(Settings.instance.pins.input.working, GPIO.BOTH, callback=self.working_changed, bouncetime=25)
 
-        GPIO.setup(Pins.airTrigger, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(Pins.airTrigger, GPIO.BOTH, callback=self.air_trigger_changed, bouncetime=25)
+        GPIO.setup(Settings.instance.pins.input.airTrigger, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.add_event_detect(Settings.instance.pins.input.airTrigger, GPIO.BOTH, callback=self.air_trigger_changed, bouncetime=25)
 
         self.__gpio_is_setup = True
 
@@ -71,8 +70,6 @@ class Controller(Observer):
         print("After cleanup")
         QtCore.QCoreApplication.instance().quit()
 
-        print(threading._active)
-        #print(sys._current_frames())
         print("os exit")
         os._exit(0)
         raise SystemExit
@@ -127,12 +124,11 @@ class Controller(Observer):
             self._states[channel] = GPIO.LOW
 
     def set_air_state(self, state):
-        self.set_pin_state(Pins.airOutput, state)
-        #print("Setting {0} (GPIO {1}) to {2}".format(Pins.airOutput.name, Pins.airOutput, "HIGH" if self.__view_model.air else "LOW"))
+        self.set_pin_state(Settings.instance.pins.output.airOutput, state)
 
-    def set_pin_state(self, enum: IntEnum, state: bool) -> None:
-        print("Setting {0} (GPIO {1}) to {2}".format(enum.name, enum, "HIGH" if state else "LOW"))
-        GPIO.output(enum, GPIO.HIGH if state else GPIO.LOW)
+    def set_pin_state(self, pin: int, state: bool) -> None:
+        print("Setting GPIO {0} to {1}".format(pin, "HIGH" if state else "LOW"))
+        GPIO.output(pin, GPIO.HIGH if state else GPIO.LOW)
 
     def working_changed(self, channel):
         if  GPIO.input(channel) == GPIO.HIGH:
@@ -150,7 +146,7 @@ class Controller(Observer):
             if self.__view_model.exhaust:
                 assert self.__exhaust_timer is None, "Exhaust timer should have been set to null!"
 
-                seconds = Settings.get('exhaust_time_after_finished')
+                seconds = Settings.instance.exhaust_time_after_finished
                 print("Setting exhaust off timer for %d seconds" % seconds)
                 self.__exhaust_timer = Timer(seconds, self.turn_exhaust_off)
                 self.__exhaust_timer.start()
@@ -160,20 +156,20 @@ class Controller(Observer):
     def turn_exhaust_on(self):
         print("Turning exhaust fan on")
         self.__view_model.exhaust = True
-        GPIO.output(Pins.exhaust, GPIO.HIGH)
+        self.set_pin_state(Settings.instance.pins.output.exhaust, GPIO.HIGH)
 
     def turn_exhaust_off(self):
         print("Turning exhaust fan off")
         self.__view_model.exhaust = False
         self.__exhaust_timer = None
-        GPIO.output(Pins.exhaust, GPIO.LOW)
+        self.set_pin_state(Settings.instance.pins.output.exhaust, GPIO.LOW)
 
     @QtCore.Slot()
     def chiller_changed(self):
         if sys.platform == 'linux':
-            self.set_pin_state(Pins.chiller, self.__view_model.chiller)
+            self.set_pin_state(Settings.instance.pins.output.chiller, self.__view_model.chiller)
 
     @QtCore.Slot()
     def exhaust_changed(self):
         if sys.platform == 'linux':
-            self.set_pin_state(Pins.exhaust, self.__view_model.exhaust)
+            self.set_pin_state(Settings.instance.pins.output.exhaust, self.__view_model.exhaust)

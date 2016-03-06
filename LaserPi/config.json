@@ -9,5 +9,18 @@
       "outlet": "28-000006087d0b"
     }
   },
+  "pins": {
+    "input": {
+      "working": 23,
+      "airTrigger": 24,
+      "flow": 25,
+      "temperature": 4
+    },
+    "output": {
+      "chiller": 6,
+      "airOutput": 13,
+      "exhaust": 5
+    }
+  },
   "exhaust_time_after_finished": 10
 }
