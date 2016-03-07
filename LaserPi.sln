@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "LaserPiPy", "LaserPiPy\LaserPiPy.pyproj", "{DDDA8437-4B43-433B-A9A2-816E3F5B341A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaserPi", "LaserPiIot\LaserPi.csproj", "{A4C11B32-DB68-435D-A4A7-B4F783625EB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaserPiIot", "LaserPiIot\LaserPiIot.csproj", "{A4C11B32-DB68-435D-A4A7-B4F783625EB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

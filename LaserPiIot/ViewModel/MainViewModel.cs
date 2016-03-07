@@ -5,6 +5,7 @@ using LaserPi.Messages;
 using System;
 
 namespace LaserPi.ViewModel {
+
     /// <summary>
     /// This class contains properties that the main View can data bind to.
     /// <para>
@@ -18,14 +19,21 @@ namespace LaserPi.ViewModel {
     /// </para>
     /// </summary>
     public class MainViewModel : ViewModelBase {
+
         #region Commands
+
         public RelayCommand ToggleChillerCommand { get; private set; }
         public RelayCommand ToggleExhaustCommand { get; private set; }
         public RelayCommand ToggleAirCommand { get; private set; }
-        #endregion
+        public RelayCommand ExitCommand { get; private set; }
+        public RelayCommand ShutdownCommand { get; private set; }
+
+        #endregion Commands
 
         #region Properties
+
         #region public string Time
+
         /// <summary>
         /// The <see cref="Time" /> property's name.
         /// </summary>
@@ -34,7 +42,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the Time property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public string Time {
             get {
@@ -50,9 +58,11 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+
+        #endregion public string Time
 
         #region public string Date
+
         /// <summary>
         /// The <see cref="Date" /> property's name.
         /// </summary>
@@ -61,7 +71,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the Date property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public string Date {
             get {
@@ -77,9 +87,11 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+
+        #endregion public string Date
 
         #region public bool AirOn
+
         /// <summary>
         /// The <see cref="AirOn" /> property's name.
         /// </summary>
@@ -88,7 +100,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the AirOn property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public bool AirOn {
             get {
@@ -104,9 +116,11 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+
+        #endregion public bool AirOn
 
         #region public bool ChillerOn
+
         /// <summary>
         /// The <see cref="ChillerOn" /> property's name.
         /// </summary>
@@ -115,7 +129,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the ChillerOn property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public bool ChillerOn {
             get {
@@ -131,9 +145,11 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+
+        #endregion public bool ChillerOn
 
         #region public bool ExhaustOn
+
         /// <summary>
         /// The <see cref="ExhaustOn" /> property's name.
         /// </summary>
@@ -142,7 +158,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the ExhaustOn property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public bool ExhaustOn {
             get {
@@ -158,9 +174,11 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
+
+        #endregion public bool ExhaustOn
 
         #region public bool IsWorking
+
         /// <summary>
         /// The <see cref="IsWorking" /> property's name.
         /// </summary>
@@ -169,7 +187,7 @@ namespace LaserPi.ViewModel {
 
         /// <summary>
         /// Sets and gets the LaserOn property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public bool IsWorking {
             get {
@@ -185,8 +203,10 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged();
             }
         }
-        #endregion
-        #endregion
+
+        #endregion public bool IsWorking
+
+        #endregion Properties
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -199,18 +219,15 @@ namespace LaserPi.ViewModel {
                 RaisePropertyChanged("Time");
                 // Code runs in Blend --> create design time data.
             } else {
-                ToggleChillerCommand = new RelayCommand(SendToggleChillerCommand, CanToggleChiller);
+                ToggleAirCommand = new RelayCommand(() => Messenger.Default.Send(new ToggleAirMessage(this)));
+                ToggleExhaustCommand = new RelayCommand(() => Messenger.Default.Send(new ToggleExhaustMessage(this)), () => !IsWorking);
+                ToggleChillerCommand = new RelayCommand(() => Messenger.Default.Send(new ToggleChillerMessage(this)), () => !IsWorking);
+
+                ExitCommand = new RelayCommand(() => Messenger.Default.Send(new ExitMessage(this)), () => !IsWorking);
+                ShutdownCommand = new RelayCommand(() => Messenger.Default.Send(new ShutdownMessage(this)), () => !IsWorking);
                 //ToggleChillerCommand.Execute(this);
                 // Code runs "for real"
             }
-        }
-
-        private void SendToggleChillerCommand() {
-            Messenger.Default.Send(new ToggleChillerMessage(this));
-        }
-
-        private bool CanToggleChiller() {
-            return !IsWorking;
         }
     }
 }

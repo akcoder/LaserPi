@@ -6,14 +6,14 @@
     xmlns:helpers="using:LaserPi.Helpers"
     xmlns:vm="using:LaserPi.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    RequestedTheme="Light"
+    RequestedTheme="Dark"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ignore="http://www.galasoft.ch/ignore"
     mc:Ignorable="d ignore">
     <Application.Resources>
         <helpers:BooleanToVisibilityConverter p3:Key="boolToVis" xmlns:p3="http://schemas.microsoft.com/winfx/2006/xaml" />
         <helpers:BooleanToOnOffConverter p3:Key="boolToOnOff" xmlns:p3="http://schemas.microsoft.com/winfx/2006/xaml" />
-        
+
         <!--Global View Model Locator-->
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
     </Application.Resources>

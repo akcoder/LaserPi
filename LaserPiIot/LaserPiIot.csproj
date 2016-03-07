@@ -108,6 +108,8 @@
     </Compile>
     <Compile Include="Helpers\BooleanToOnOffConverter.cs" />
     <Compile Include="Helpers\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Messages\ExitMessage.cs" />
+    <Compile Include="Messages\ShutdownMessage.cs" />
     <Compile Include="Messages\ToggleAirMessage.cs" />
     <Compile Include="Messages\ToggleChillerMessage.cs" />
     <Compile Include="Messages\ToggleExhaustMessage.cs" />
