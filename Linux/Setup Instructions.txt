@@ -10,11 +10,13 @@ localectl set-keymap us
 
 exit
 
+#Wallpaper setup
+#cp splash.png /home/pi/splash.png
 export DISPLAY=:0
 pcmanfm --set-wallpaper=/home/pi/splash.png
 
 sudo apt-get update && sudo apt-get install fbi htop dos2unix libperl4-corelibs-perl lsof python3-rpi.gpio \
-python3-pyside.qtcore python3-pyside.qtpython3-pyside.qtnetwork python3-pyside.qtscript python3-pyqtgraph
+python3-pyside.qtcore python3-pyside.qtpython3-pyside.qtnetwork python3-pyside.qtscript
 
 #To enable visual studio debugging
 #sudo pip3 install ptvsd
@@ -27,7 +29,6 @@ sudo echo "dtoverlay=w1-gpio" >> /boot/config.txt
 
 #Splash screen instructions
 sudo  sed -i 's/rootwait$/rootwait quiet/g' /boot/cmdline.txt
-#cp splash.png /home/pi/splash.png
 #cp asplashscreen to /etc/init.d/asplashscreen
 sudo chmod a+x /etc/init.d/asplashscreen
 sudo insserv /etc/init.d/asplashscreen
