@@ -5,14 +5,22 @@
   },
   "sensors": {
     "temperature": {
-      "inlet": "28-000006094026",
-      "outlet": "28-000006087d0b"
-    }
-  },
-  "thresholds": {
-    "temp": {
-      "danger": 25,
-      "warning": 20
+      "inlet": {
+        "text": "Inlet",
+        "id": "28-000006094026",
+        "thresholds": {
+          "red": 25,
+          "yellow": 21
+        }
+      },
+      "outlet": {
+        "text": "Outlet",
+        "id": "28-000006087d0b",
+        "thresholds": {
+          "red": 24,
+          "yellow": 20
+        }
+      }
     }
   },
   "pins": {

@@ -70,7 +70,7 @@ class Controller(Observer):
         print("After cleanup")
         QtCore.QCoreApplication.instance().quit()
 
-        print("os exit")
+        print("OS exit")
         os._exit(0)
         raise SystemExit
 
@@ -101,6 +101,7 @@ class Controller(Observer):
             GPIO.cleanup()
 
     def handle_temp_changed(self, name: str, value: float) -> None:
+        self.__view_model.onTemperatureChanged.emit(name, value)
         setattr(self.__view_model, '%s_temp' % name, value)
         print(name, value)
 

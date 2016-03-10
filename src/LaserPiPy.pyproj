@@ -74,6 +74,8 @@
     </Content>
     <Content Include="Views\Label.qml" />
     <Content Include="Views\Main.qml" />
+    <Content Include="Views\Temperature.js" />
+    <Content Include="Views\Temperature.qml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -10,8 +10,6 @@ class MainViewModel(QtCore.QObject):
         self.__chiller_on = False
         self.__exhaust_on = False
         self.__is_working = False
-        self.__inlet_temp = -255
-        self.__outlet_temp = -255
         self.__flow_rate = -255
 
     @QtCore.Slot()
@@ -69,22 +67,6 @@ class MainViewModel(QtCore.QObject):
         self.onAirChanged.emit()
 
 
-    def __get_inlet_temp(self) -> str:
-        return '{0:.1f}'.format(self.__inlet_temp)
-
-    def __set_inlet_temp(self, value: float):
-        self.__inlet_temp = value
-        self.onInletTempChanged.emit()
-
-
-    def __get_outlet_temp(self) -> str:
-        return '{0:.1f}'.format(self.__outlet_temp)
-
-    def __set_outlet_temp(self, value: float):
-        self.__outlet_temp = value
-        self.onOutletTempChanged.emit()
-
-
     def __get_flow_rate(self) -> str:
         return self.__flow_rate
 
@@ -93,9 +75,14 @@ class MainViewModel(QtCore.QObject):
         self.onFlowRateChanged.emit()
 
 
-    @QtCore.Slot(str, result=float)
-    def tempThreshold(self, key):
-        return getattr(Settings.instance.thresholds.temp, key)
+    @QtCore.Slot(result=str)
+    def temperature_sensors(self):
+        return str(Settings.json['sensors']['temperature'])
+
+    def degree_symbol(self):
+        return '\u00b0'
+
+    degree_symbol = QtCore.Property(str, lambda _: '\u00b0', constant=True)
 
     onWorkingChanged = QtCore.Signal()
     onChillerChanged = QtCore.Signal()
@@ -105,8 +92,7 @@ class MainViewModel(QtCore.QObject):
     onExitClicked = QtCore.Signal()
     onShutdownClicked = QtCore.Signal()
 
-    onInletTempChanged = QtCore.Signal()
-    onOutletTempChanged = QtCore.Signal()
+    onTemperatureChanged = QtCore.Signal(str, float)
     onFlowRateChanged = QtCore.Signal()
 
     chiller = QtCore.Property(bool, __get_chiller_on, __set_chiller_on, notify=onChillerChanged)
@@ -114,6 +100,4 @@ class MainViewModel(QtCore.QObject):
     air = QtCore.Property(bool, __get_air_on, __set_air_on, notify=onAirChanged)
     working = QtCore.Property(bool, __get_is_working, __set_is_working, notify=onWorkingChanged)
 
-    inlet_temp = QtCore.Property(str, __get_inlet_temp, __set_inlet_temp, notify=onInletTempChanged)
-    outlet_temp = QtCore.Property(str, __get_outlet_temp, __set_outlet_temp, notify=onOutletTempChanged)
     flow_rate = QtCore.Property(str, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)

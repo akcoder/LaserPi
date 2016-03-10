@@ -6,6 +6,7 @@ def json2obj(file): return json.load(file, object_hook=_json_object_hook)
 
 class Settings():
     """Settings"""
+    json = json.load(open('config.json'))
     instance = json2obj(open('config.json'))
 
     @classmethod

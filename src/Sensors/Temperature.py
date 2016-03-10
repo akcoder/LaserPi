@@ -1,5 +1,7 @@
 import os
-import timefrom Helpers import Settings
+import time
+import random
+from Helpers import Settings
 from Helpers.PerpetualTimer import PerpetualTimer
 from Helpers.Observer import Event
 
@@ -41,12 +43,14 @@ class Temperature(object):
 
     def read(self, name: str) -> float:
         index = self.__mapper.get(self.__units)
-        temp = self.__read_temp(getattr(self.__sensors, name))[index]
+        id = getattr(self.__sensors, name).id
+
+        temp = self.__read_temp(id)[index]
 
         if temp is not None:
             return round(temp, 1)
 
-        return -255
+        return round(random.random() * 30, 1)
 
     @classmethod
     def __read_temp_raw(cls, id: str) -> []:
@@ -76,4 +80,4 @@ class Temperature(object):
             temp_c = float(temp_string) / 1000.0
             temp_f = temp_c * 9.0 / 5.0 + 32.0
             temp_k = temp_c + 273.15
-            return (temp_c, temp_f, temp_k)
+            return (temp_c, temp_f, temp_k)

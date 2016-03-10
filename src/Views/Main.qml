@@ -1,5 +1,6 @@
 import QtQuick 1.1
 //import QtQuick 2.0
+import "Temperature.js" as Temperature
 
 Rectangle {
     id: window
@@ -7,23 +8,13 @@ Rectangle {
     height: 480
     color: "black"
 
+	Component.onCompleted: Temperature.setupTempSensors(sensors);
+
     property int rowHeight: 50
     property int column1Width: 125
     property int column2Width: 150
     property int column2_2Width: 50
 	property int buttonWidth: 75
-
-	function getTempColor(value) {
-		if (value >= viewModel.tempThreshold("danger")) {
-			return 'red';
-		}
-
-		if (value >= viewModel.tempThreshold("warning")) {
-			return 'yellow'
-		}
-
-		return 'green';
-	}
 
     Column {
         spacing: 5
@@ -109,6 +100,7 @@ Rectangle {
     }
 
     Column {
+		id: sensors
         spacing: 10
 		anchors.top: parent.top
 		anchors.topMargin: 10
@@ -135,48 +127,6 @@ Rectangle {
 				}
             }
 		}
-
-        //Row 2
-        Row {
-            height: rowHeight
-			opacity: viewModel.inlet_temp > -255 ? 1 : 0
-
-            Label {
-                text: "Inlet Temp"
-                height: parent.height
-                width: column2Width
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-                text: viewModel.inlet_temp
-				color: getTempColor(viewModel.inlet_temp)
-                height: parent.height
-                width: column2_2Width
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        //Row 3
-        Row {
-			height: rowHeight
-			opacity: viewModel.outlet_temp > -255 ? 1 : 0
-
-            Label {
-                text: "Outlet Temp"
-                height: parent.height
-                width: column2Width
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-                text: viewModel.outlet_temp
-				color: getTempColor(viewModel.outlet_temp)
-                height: parent.height
-                width: column2_2Width
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
 
 		//Row 4
 		Row {
