@@ -1,7 +1,6 @@
 import QtQuick 1.1
 
 Row {
-	id: relay
     height: rowHeight
 	opacity: 0
 
@@ -15,7 +14,7 @@ Row {
         id: fadeAnimation
         from: 0
         to: 1
-        duration: 500
+        duration: 2500
     }
 
 	function checkStartAnimation() {
