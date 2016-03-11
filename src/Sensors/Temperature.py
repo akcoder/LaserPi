@@ -10,8 +10,6 @@ class Temperature(ISensor):
     """Reads temperature data"""
 
     __base_dir = '/sys/bus/w1/devices/'
-    __sensors = Settings.instance.sensors.temperature
-    __units = Settings.instance.units.temperature
     __mapper = {
         "metric": 0,
         "imperial": 1,
@@ -20,6 +18,8 @@ class Temperature(ISensor):
 
     def __init__(self):
         print('Setting up %s' % __name__)
+        self.__sensors = Settings.instance.sensors.temperature
+        self.__units = Settings.instance.units.temperature
         self.__temp_sensors = {}
 
         #Set all the temp values to -255 so we can do change detection

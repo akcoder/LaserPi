@@ -2,6 +2,8 @@
 var container;
 var components = [];
 var degree_symbol = '°';
+var settingsObj = JSON.parse(settings.json);
+var units = getUnits();
 
 function setupTempSensors(con) {
     container = con;
@@ -14,8 +16,7 @@ function setupTempSensors(con) {
 }
 
 function addTempSensors() {
-    var data = viewModel.temperature_sensors().replace(/'/g, '"');
-    var sensors = JSON.parse(data);
+    var sensors = settingsObj.sensors.temperature;
 
     if (component.status == Component.Ready) {
         for (var key in sensors) {
@@ -28,6 +29,25 @@ function addTempSensors() {
     }
 }
 
+//Slot for viewModel.onTemperatureChanged
 function tempChanged(id, value) {
     components[id].temperature = value;
+}
+
+function format(value) {
+    return [value, degree_symbol, units].join('');
+    //Temperature.degree_symbol.concat(
+}
+
+function getUnits() {
+    switch (settingsObj.units.temperature) {
+        case 'metric':
+            return 'C';
+        case 'imperial':
+            return 'F';
+        case 'kelvin':
+            return 'K';
+    }
+
+    return 'UNKN';
 }

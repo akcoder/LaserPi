@@ -75,10 +75,6 @@ class MainViewModel(QtCore.QObject):
         self.onFlowRateChanged.emit()
 
 
-    @QtCore.Slot(result=str)
-    def temperature_sensors(self):
-        return str(Settings().json['sensors']['temperature'])
-
     onWorkingChanged = QtCore.Signal()
     onChillerChanged = QtCore.Signal()
     onExhaustChanged = QtCore.Signal()

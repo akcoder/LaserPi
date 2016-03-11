@@ -23,7 +23,7 @@ class FlowMeter(ISensor):
         self.__flow_rate = -255
         self.__time_start = time.time()
         self.__time_delta = 0
-        self.__correction_factor = Settings().instance.sensors.flow.correction_factor
+        self.__correction_factor = Settings.instance.sensors.flow.correction_factor
         self.__multiplier = self.__conversion[Settings.instance.units.flow]
 
         if sys.platform == 'linux':

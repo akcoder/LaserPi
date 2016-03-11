@@ -42,7 +42,7 @@ Row {
     }
 
     Label {
-        text: temperature.toFixed(1) + Temperature.degree_symbol
+        text: temperature.toFixed(1) + Temperature.degree_symbol + Temperature.units
 		color: getTempColor(temperature)
         height: parent.height
         width: column2_2Width
