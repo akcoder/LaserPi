@@ -3,7 +3,9 @@
 rm -rf Music Videos Pictures Documents Public Templates Downloads
 
 sudo -s
-localectl set-locale en_US.utf8
+#sudo locale-gen en_US.ISO-8859-1
+dpkg-reconfigure locales
+localectl set-locale en_US.ISO-8859-1
 echo "America/Anchorage" > /etc/timezone
 #localectl set-x11-keymap us pc105 workman
 localectl set-keymap us

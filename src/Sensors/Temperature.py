@@ -4,8 +4,9 @@ import random
 from Helpers import Settings
 from Helpers.PerpetualTimer import PerpetualTimer
 from Helpers.Observer import Event
+from Sensors import ISensor
 
-class Temperature(object):
+class Temperature(ISensor):
     """Reads temperature data"""
 
     __base_dir = '/sys/bus/w1/devices/'
@@ -17,7 +18,8 @@ class Temperature(object):
         "kelvin": 2
     }
 
-    def __init__(self, **kwargs):
+    def __init__(self):
+        print('Setting up %s' % __name__)
         self.__temp_sensors = {}
 
         #Set all the temp values to -255 so we can do change detection

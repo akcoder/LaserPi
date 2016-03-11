@@ -1,5 +1,5 @@
 from PySide import QtCore
-from Helpers.Settings import Settings
+from Helpers import Settings
 
 class MainViewModel(QtCore.QObject):
     """View model for the main window"""
@@ -77,12 +77,7 @@ class MainViewModel(QtCore.QObject):
 
     @QtCore.Slot(result=str)
     def temperature_sensors(self):
-        return str(Settings.json['sensors']['temperature'])
-
-    def degree_symbol(self):
-        return '\u00b0'
-
-    degree_symbol = QtCore.Property(str, lambda _: '\u00b0', constant=True)
+        return str(Settings().json['sensors']['temperature'])
 
     onWorkingChanged = QtCore.Signal()
     onChillerChanged = QtCore.Signal()
@@ -100,4 +95,4 @@ class MainViewModel(QtCore.QObject):
     air = QtCore.Property(bool, __get_air_on, __set_air_on, notify=onAirChanged)
     working = QtCore.Property(bool, __get_is_working, __set_is_working, notify=onWorkingChanged)
 
-    flow_rate = QtCore.Property(str, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)
+    flow_rate = QtCore.Property(float, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)

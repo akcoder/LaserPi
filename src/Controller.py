@@ -7,7 +7,7 @@ from PySide import QtCore
 from ViewModel import MainViewModel
 from Helpers import Settings
 from enum import IntEnum
-from Sensors.Temperature import Temperature
+from Sensors import FlowMeter, Temperature
 from Helpers.PerpetualTimer import PerpetualTimer
 import threading
 from Helpers.Observer import Observer
@@ -34,15 +34,19 @@ class Controller(Observer):
             self._states = {
                 Settings.instance.pins.input.working:GPIO.LOW,
                 Settings.instance.pins.input.airTrigger:GPIO.LOW
-                }
+            }
 
             self.__gpio_thread = Thread(target=self.__setup_gpio)
             self.__gpio_thread.setDaemon(1)
             self.__gpio_thread.start()
 
         self.observe('temp_changed', self.handle_temp_changed)
+        self.observe('flow_changed', self.handle_flow_changed)
+
         self.__temp_sensor = Temperature()
         self.__temp_sensor.start()
+        self.__flow_sensor = FlowMeter()
+        self.__flow_sensor.start()
 
     def __del__(self):
         print('Destructor called, cleaning up')
@@ -102,8 +106,10 @@ class Controller(Observer):
 
     def handle_temp_changed(self, name: str, value: float) -> None:
         self.__view_model.onTemperatureChanged.emit(name, value)
-        setattr(self.__view_model, '%s_temp' % name, value)
-        print(name, value)
+        #print(name, value)
+
+    def handle_flow_changed(self, value: float) -> None:
+        self.__view_model.flow_rate = value
 
     def air_changed(self) -> None:
         if sys.platform != 'linux':

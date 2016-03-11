@@ -1,7 +1,7 @@
 {
   "units": {
     "temperature": "metric",
-    "flow": "metric"
+    "flow": "imperial"
   },
   "sensors": {
     "temperature": {
@@ -21,6 +21,9 @@
           "yellow": 20
         }
       }
+    },
+    "flow": {
+      "correction_factor": 7.5
     }
   },
   "pins": {

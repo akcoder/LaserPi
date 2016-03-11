@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import "Temperature.js" as Temperature
 
 Row {
     height: rowHeight
@@ -41,7 +42,7 @@ Row {
     }
 
     Label {
-        text: temperature.toFixed(1) + viewModel.degree_symbol
+        text: temperature.toFixed(1) + Temperature.degree_symbol
 		color: getTempColor(temperature)
         height: parent.height
         width: column2_2Width

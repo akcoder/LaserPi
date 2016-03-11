@@ -42,6 +42,9 @@
     <Compile Include="Sensors\FlowMeter.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sensors\ISensor.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sensors\Temperature.py">
       <SubType>Code</SubType>
     </Compile>

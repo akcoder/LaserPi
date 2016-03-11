@@ -1,6 +1,7 @@
 ﻿var component;
 var container;
 var components = [];
+var degree_symbol = '°';
 
 function setupTempSensors(con) {
     container = con;
