@@ -1,3 +1,4 @@
+import sys
 import os
 import time
 import random
@@ -15,6 +16,7 @@ class Temperature(ISensor):
         "imperial": 1,
         "kelvin": 2
     }
+    __updateInterval = 0.25 if sys.platform == 'linux' else 2
 
     def __init__(self):
         print('Setting up %s' % __name__)
@@ -27,7 +29,7 @@ class Temperature(ISensor):
             self.__temp_sensors[key] = -255
 
     def start(self) -> None:
-        self.__sensor_timer = PerpetualTimer(0.25, self.__poll_sensors)
+        self.__sensor_timer = PerpetualTimer(self.__updateInterval, self.__poll_sensors)
         self.__sensor_timer.start()
 
     def stop(self) -> None:

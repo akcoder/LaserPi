@@ -101,20 +101,21 @@ Rectangle {
 
     Column {
 		id: sensors
-        spacing: 10
+        spacing: 5
 		anchors.top: parent.top
 		anchors.topMargin: 10
 		anchors.right: parent.right
 		anchors.rightMargin: 10
 
         Row {
-            //height: rowHeight
+            height: rowHeight
 
 			Label {
 				id: timeText
-				width: 225
-                //height: parent.height
 				text: Qt.formatDateTime(new Date(), "h:mm AP MMM d, yyyy")
+				width: 235
+				horizontalAlignment: Text.AlignRight
+                //height: parent.height
 			}
 
 			Timer {
@@ -143,8 +144,9 @@ Rectangle {
             Label {
                 text: [viewModel.flow_rate, viewModel.flow_rate_units].join(' ')
                 height: parent.height
-                width: column2_2Width
+                //width: column2_2Width
                 verticalAlignment: Text.AlignVCenter
+				horizontalAlignment: Text.AlignRight
             }
 		}
 	}

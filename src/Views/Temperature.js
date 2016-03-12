@@ -34,11 +34,6 @@ function tempChanged(id, value) {
     components[id].temperature = value;
 }
 
-function format(value) {
-    return [value, degree_symbol, units].join('');
-    //Temperature.degree_symbol.concat(
-}
-
 function getUnits() {
     switch (settingsObj.units.temperature) {
         case 'metric':

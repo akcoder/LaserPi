@@ -42,10 +42,18 @@ Row {
     }
 
     Label {
-        text: temperature.toFixed(1) + Temperature.degree_symbol + Temperature.units
+        text: temperature.toFixed(1)
 		color: getTempColor(temperature)
         height: parent.height
-        width: column2_2Width
+        //width: column2_2Width
         verticalAlignment: Text.AlignVCenter
+		horizontalAlignment: Text.AlignRight
     }
+
+	Label {
+        text: Temperature.degree_symbol + Temperature.units
+		color: getTempColor(temperature)
+        height: parent.height
+        verticalAlignment: Text.AlignVCenter
+	}
 }
