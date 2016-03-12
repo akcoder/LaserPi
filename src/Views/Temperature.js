@@ -1,41 +1,34 @@
-﻿var component;
-var container;
-var components = [];
-var degree_symbol = '°';
-var settingsObj = JSON.parse(settings.json);
-var units = getUnits();
+﻿//sensors, settingsObj.sensors.temperature, settingsObj.units.temperature, viewModel.onTemperatureChanged
+function setup(container, sensors, measurementSystem, changeEvent) {
+    var component = Qt.createComponent("Temperature.qml");
 
-function setupTempSensors(con) {
-    container = con;
-    component = Qt.createComponent("Temperature.qml");
-
+    var func = function () { addSensors(component, container, sensors, changeEvent, measurementSystem); };
     if (component.status == Component.Ready)
-        addTempSensors();
+        func()
     else
-        component.statusChanged.connect(addTempSensors);
+        component.statusChanged.connect(func);
 }
 
-function addTempSensors() {
-    var sensors = settingsObj.sensors.temperature;
+function addSensors(component, container, sensors, changeEvent, measurementSystem) {
+    var components = [];
 
     if (component.status == Component.Ready) {
         for (var key in sensors) {
-            components[key] = component.createObject(container, { "model": sensors[key] });
+            var item = component.createObject(container, { "model": sensors[key] });
+            item.units = '°' + getUnits(measurementSystem);
+            components[key] = item;
         }
 
-        viewModel.onTemperatureChanged.connect(tempChanged);
+        changeEvent.connect(function (id, value) {
+            components[id].temperature = value;
+        });
     } else if (component.status == Component.Error) {
         console.log("Error loading component:", component.errorString());
     }
 }
 
-//Slot for viewModel.onTemperatureChanged
-function tempChanged(id, value) {
-    components[id].temperature = value;
-}
-
-function getUnits() {
-    switch (settingsObj.units.temperature) {
+function getUnits(measurementSystem) {
+    switch (measurementSystem) {
         case 'metric':
             return 'C';
         case 'imperial':

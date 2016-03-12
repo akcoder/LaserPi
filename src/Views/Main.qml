@@ -1,5 +1,4 @@
 import QtQuick 1.1
-//import QtQuick 2.0
 import "Temperature.js" as Temperature
 
 Rectangle {
@@ -8,7 +7,11 @@ Rectangle {
     height: 480
     color: "black"
 
-	Component.onCompleted: Temperature.setupTempSensors(sensors);
+	Component.onCompleted: {
+		var settingsObj = JSON.parse(settings.json);
+
+		Temperature.setup(sensors, settingsObj.sensors.temperature, settingsObj.units.temperature, viewModel.onTemperatureChanged);
+	}
 
     property int rowHeight: 50
     property int column1Width: 125

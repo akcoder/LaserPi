@@ -7,6 +7,7 @@ Row {
 
     property variant model: null
 	property real temperature: -255
+	property string units: null
 	onTemperatureChanged: checkStartAnimation()
 
 	Component.onCompleted: fadeAnimation.pause()
@@ -51,7 +52,7 @@ Row {
     }
 
 	Label {
-        text: Temperature.degree_symbol + Temperature.units
+        text: units
 		color: getTempColor(temperature)
         height: parent.height
         verticalAlignment: Text.AlignVCenter
