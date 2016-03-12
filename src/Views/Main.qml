@@ -1,5 +1,6 @@
 import QtQuick 1.1
 import "Temperature.js" as Temperature
+import "FlowMeter.js" as FlowMeter
 
 Rectangle {
     id: window
@@ -10,12 +11,13 @@ Rectangle {
 	Component.onCompleted: {
 		var settingsObj = JSON.parse(settings.json);
 
-		Temperature.setup(sensors, settingsObj.sensors.temperature, settingsObj.units.temperature, viewModel.onTemperatureChanged);
+		Temperature.setup(sensors, settingsObj.sensors.temperature, viewModel.onTemperatureChanged);
+		FlowMeter.setup(sensors, settingsObj.sensors.flow, viewModel.onFlowRateChanged);
 	}
 
     property int rowHeight: 50
     property int column1Width: 125
-    property int column2Width: 150
+    property int column2Width: 125
     property int column2_2Width: 50
 	property int buttonWidth: 75
 
@@ -121,25 +123,6 @@ Rectangle {
 				onTriggered: {
 					timeText.text =  Qt.formatDateTime(new Date(),"h:mm AP MMM d, yyyy")
 				}
-            }
-		}
-
-		//Row 4
-		Row {
-			height: rowHeight
-			opacity: viewModel.flow_rate > -255 ? 1 : 0
-
-            Label {
-                text: "Flow Rate"
-                height: parent.height
-                width: column2Width
-            }
-
-            Label {
-                text: [viewModel.flow_rate, viewModel.flow_rate_units].join(' ')
-                height: parent.height
-                //width: column2_2Width
-				horizontalAlignment: Text.AlignRight
             }
 		}
 	}

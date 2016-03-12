@@ -17,10 +17,9 @@ class Temperature(ISensor):
     }
     __updateInterval = 0.25 if sys.platform == 'linux' else 2
 
-    def __init__(self, config, units):
+    def __init__(self, config):
         print('Setting up %s' % __name__)
         self.__sensors = config
-        self.__units = units
         self.__temp_sensors = {}
 
         #Set all the temp values to -255 so we can do change detection
@@ -45,10 +44,10 @@ class Temperature(ISensor):
                 Event('temp_changed', key, temp)
 
     def read(self, name: str) -> float:
-        index = self.__mapper.get(self.__units)
-        id = getattr(self.__sensors, name).id
+        sensor = getattr(self.__sensors, name)
+        index = self.__mapper.get(sensor.units)
 
-        temp = self.__read_temp(id)[index]
+        temp = self.__read_temp(sensor.id)[index]
 
         if temp is not None:
             return round(temp, 1)

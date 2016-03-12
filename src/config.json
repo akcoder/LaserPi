@@ -1,13 +1,10 @@
 {
-  "units": {
-    "temperature": "metric",
-    "flow": "imperial"
-  },
   "sensors": {
     "temperature": {
       "inlet": {
         "text": "Inlet",
         "id": "28-000006094026",
+        "units": "metric",
         "thresholds": {
           "red": 25,
           "yellow": 21
@@ -16,6 +13,7 @@
       "outlet": {
         "text": "Outlet",
         "id": "28-000006087d0b",
+        "units": "metric",
         "thresholds": {
           "red": 24,
           "yellow": 20
@@ -23,8 +21,12 @@
       }
     },
     "flow": {
-      "correction_factor": 7.5,
-      "pin": 25
+      "foo": {
+        "text": "Flow Rate",
+        "units": "imperial",
+        "correction_factor": 7.5,
+        "pin": 25
+      }
     }
   },
   "pins": {

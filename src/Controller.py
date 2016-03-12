@@ -46,8 +46,7 @@ class Controller(Observer):
 
         for key in Settings.instance.sensors._fields:
             config = getattr(Settings.instance.sensors, key)
-            units = getattr(Settings.instance.units, key)
-            sensor = SensorFactory.factory(key, config, units)
+            sensor = SensorFactory.factory(key, config)
             sensor.start();
             self.__sensors.append(sensor)
 
@@ -111,8 +110,8 @@ class Controller(Observer):
         self.__view_model.onTemperatureChanged.emit(name, value)
         #print(name, value)
 
-    def handle_flow_changed(self, value: float) -> None:
-        self.__view_model.flow_rate = value
+    def handle_flow_changed(self, name: str, value: float) -> None:
+        self.__view_model.onFlowRateChanged.emit(name, value)
 
     def air_changed(self) -> None:
         if sys.platform != 'linux':

@@ -80,6 +80,8 @@
     </Content>
     <Content Include="Views\Label.qml" />
     <Content Include="Views\Main.qml" />
+    <Content Include="Views\FlowMeter.js" />
+    <Content Include="Views\FlowMeter.qml" />
     <Content Include="Views\Temperature.js" />
     <Content Include="Views\Temperature.qml" />
   </ItemGroup>

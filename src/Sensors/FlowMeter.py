@@ -16,16 +16,22 @@ class FlowMeter(ISensor):
         "imperial": 0.26417287472922
     }
 
-    def __init__(self, config, units):
+    def __init__(self, config):
         print('Setting up %s' % __name__)
 
         self.__count = 0
         self.__flow_rate = -255
         self.__time_start = time.time()
         self.__time_delta = 0
-        self.__pin = config.pin
-        self.__correction_factor = config.correction_factor
-        self.__multiplier = self.__conversion[units]
+
+        #The id can be anything. Right now its 'foo'
+        #In theory we could have multiple flow meters...
+
+        meter = config[0]
+        self.__id = config._fields[0]
+        self.__pin = meter.pin
+        self.__correction_factor = meter.correction_factor
+        self.__multiplier = self.__conversion[meter.units]
 
         if sys.platform == 'linux':
             self.__gpio_thread = Thread(target=self.__setup_gpio)
@@ -56,7 +62,7 @@ class FlowMeter(ISensor):
                 #Convert to imperial if need be
                 flow_rate = round(liters_per_min * self.__multiplier, 1)
                 self.__flow_rate = flow_rate
-                Event('flow_changed', flow_rate)
+                Event('flow_changed', self.__id, flow_rate)
 
             self.__count = 0
             self.__time_delta = 0

@@ -1,6 +1,5 @@
-﻿//sensors, settingsObj.sensors.temperature, settingsObj.units.temperature, viewModel.onTemperatureChanged
-function setup(container, sensors, changeEvent) {
-    var component = Qt.createComponent("Temperature.qml");
+﻿function setup(container, sensors, changeEvent) {
+    var component = Qt.createComponent("FlowMeter.qml");
 
     var func = function () { addSensors(component, container, sensors, changeEvent); };
     if (component.status == Component.Ready)
@@ -17,7 +16,7 @@ function addSensors(component, container, sensors, changeEvent) {
             var model = sensors[key];
 
             var item = component.createObject(container);
-            item.units = '°' + getUnits(model.units);
+            item.units = ' ' + getUnits(model.units);
             item.text = model.text;
 
             components[key] = {
@@ -49,11 +48,9 @@ function getColor(value, thresholds) {
 function getUnits(measurementSystem) {
     switch (measurementSystem) {
         case 'metric':
-            return 'C';
+            return 'L/min';
         case 'imperial':
-            return 'F';
-        case 'kelvin':
-            return 'K';
+            return 'G/min';
     }
 
     return 'UNKN';

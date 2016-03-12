@@ -66,15 +66,6 @@ class MainViewModel(QtCore.QObject):
         self.__air_on = value
         self.onAirChanged.emit()
 
-
-    def __get_flow_rate(self) -> str:
-        return self.__flow_rate
-
-    def __set_flow_rate(self, value: float):
-        self.__flow_rate = value
-        self.onFlowRateChanged.emit()
-
-
     onWorkingChanged = QtCore.Signal()
     onChillerChanged = QtCore.Signal()
     onExhaustChanged = QtCore.Signal()
@@ -84,11 +75,9 @@ class MainViewModel(QtCore.QObject):
     onShutdownClicked = QtCore.Signal()
 
     onTemperatureChanged = QtCore.Signal(str, float)
-    onFlowRateChanged = QtCore.Signal()
+    onFlowRateChanged = QtCore.Signal(str, float)
 
     chiller = QtCore.Property(bool, __get_chiller_on, __set_chiller_on, notify=onChillerChanged)
     exhaust = QtCore.Property(bool, _get_exhaust_on, __set_exhaust_on, notify=onExhaustChanged)
     air = QtCore.Property(bool, __get_air_on, __set_air_on, notify=onAirChanged)
     working = QtCore.Property(bool, __get_is_working, __set_is_working, notify=onWorkingChanged)
-
-    flow_rate = QtCore.Property(float, __get_flow_rate, __set_flow_rate, notify=onFlowRateChanged)
