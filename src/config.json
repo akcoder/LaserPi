@@ -23,7 +23,7 @@
     "flow": {
       "foo": {
         "text": "Flow Rate",
-        "units": "imperial",
+        "units": "metric",
         "correction_factor": 7.5,
         "pin": 25
       }

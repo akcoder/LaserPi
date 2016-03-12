@@ -47,11 +47,9 @@ function getColor(value, thresholds) {
 
 function getUnits(measurementSystem) {
     switch (measurementSystem) {
-        case 'metric':
-            return 'L/min';
         case 'imperial':
             return 'G/min';
+        default:
+            return 'L/min';
     }
-
-    return 'UNKN';
 }

@@ -31,7 +31,12 @@ class FlowMeter(ISensor):
         self.__id = config._fields[0]
         self.__pin = meter.pin
         self.__correction_factor = meter.correction_factor
-        self.__multiplier = self.__conversion[meter.units]
+
+        conversion = self.__conversion[meter.units]
+        if conversion == None:
+            conversion = self.__conversion[0]
+
+        self.__multiplier = conversion
 
         if sys.platform == 'linux':
             self.__gpio_thread = Thread(target=self.__setup_gpio)

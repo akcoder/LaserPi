@@ -48,13 +48,11 @@ function getColor(value, thresholds) {
 
 function getUnits(measurementSystem) {
     switch (measurementSystem) {
-        case 'metric':
-            return 'C';
         case 'imperial':
             return 'F';
         case 'kelvin':
             return 'K';
+        default:
+            return 'C';
     }
-
-    return 'UNKN';
 }

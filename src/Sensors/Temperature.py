@@ -46,6 +46,8 @@ class Temperature(ISensor):
     def read(self, name: str) -> float:
         sensor = getattr(self.__sensors, name)
         index = self.__mapper.get(sensor.units)
+        if index == None:
+            index = 0
 
         temp = self.__read_temp(sensor.id)[index]
 
