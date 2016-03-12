@@ -5,10 +5,11 @@ Row {
     height: rowHeight
 	opacity: 0
 
-    property variant model: null
-	property real temperature: -255
+    property string text: null
+	property real value: -255
 	property string units: null
-	onTemperatureChanged: checkStartAnimation()
+	property color color: 'blue'
+	onValueChanged: checkStartAnimation()
 
 	Component.onCompleted: fadeAnimation.pause()
 
@@ -25,26 +26,16 @@ Row {
 		}
 	}
 
-	function getTempColor(value) {
-		for (var key in model.thresholds) {
-			if (value >= model.thresholds[key]) {
-				return key;
-			}
-		}
-
-		return 'green';
-	}
-
     Label {
-        text: model.text
+        text: parent.text
         height: parent.height
         width: column2Width
         verticalAlignment: Text.AlignVCenter
     }
 
     Label {
-        text: temperature.toFixed(1)
-		color: getTempColor(temperature)
+        text: value.toFixed(1)
+		color: parent.color
         height: parent.height
         //width: column2_2Width
         verticalAlignment: Text.AlignVCenter
@@ -53,7 +44,7 @@ Row {
 
 	Label {
         text: units
-		color: getTempColor(temperature)
+		color: parent.color
         height: parent.height
         verticalAlignment: Text.AlignVCenter
 	}

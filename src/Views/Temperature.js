@@ -14,17 +14,36 @@ function addSensors(component, container, sensors, changeEvent, measurementSyste
 
     if (component.status == Component.Ready) {
         for (var key in sensors) {
-            var item = component.createObject(container, { "model": sensors[key] });
+            var model = sensors[key];
+
+            var item = component.createObject(container);
             item.units = '°' + getUnits(measurementSystem);
-            components[key] = item;
+            item.text = model.text;
+
+            components[key] = {
+                item: item,
+                model: model
+            };
         }
 
         changeEvent.connect(function (id, value) {
-            components[id].temperature = value;
+            var item = components[id].item;
+            item.value = value;
+            item.color = getColor(value, components[id].model.thresholds);
         });
     } else if (component.status == Component.Error) {
         console.log("Error loading component:", component.errorString());
     }
+}
+
+function getColor(value, thresholds) {
+    for (var key in thresholds) {
+        if (value >= thresholds[key]) {
+            return key;
+        }
+    }
+
+    return 'green';
 }
 
 function getUnits(measurementSystem) {
