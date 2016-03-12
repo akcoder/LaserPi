@@ -2,7 +2,6 @@ import sys
 import os
 import time
 import random
-from Helpers import Settings
 from Helpers.PerpetualTimer import PerpetualTimer
 from Helpers.Observer import Event
 from Sensors import ISensor
@@ -18,10 +17,10 @@ class Temperature(ISensor):
     }
     __updateInterval = 0.25 if sys.platform == 'linux' else 2
 
-    def __init__(self):
+    def __init__(self, config, units):
         print('Setting up %s' % __name__)
-        self.__sensors = Settings.instance.sensors.temperature
-        self.__units = Settings.instance.units.temperature
+        self.__sensors = config
+        self.__units = units
         self.__temp_sensors = {}
 
         #Set all the temp values to -255 so we can do change detection

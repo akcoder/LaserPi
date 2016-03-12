@@ -2,15 +2,15 @@
 
 import os
 import sys
+import threading
 from threading import Thread, Timer
 from PySide import QtCore
 from ViewModel import MainViewModel
 from Helpers import Settings
 from enum import IntEnum
-from Sensors import FlowMeter, Temperature
 from Helpers.PerpetualTimer import PerpetualTimer
-import threading
 from Helpers.Observer import Observer
+from Sensors.SensorFactory import SensorFactory
 
 if sys.platform == 'linux':
     import RPi.GPIO as GPIO
@@ -29,6 +29,7 @@ class Controller(Observer):
         self.__view_model.onExhaustChanged.connect(self.exhaust_changed)
         self.__view_model.onExitClicked.connect(self.close)
         self.__view_model.onShutdownClicked.connect(self.shutdown)
+        self.__sensors = []
 
         if sys.platform == 'linux':
             self._states = {
@@ -43,10 +44,12 @@ class Controller(Observer):
         self.observe('temp_changed', self.handle_temp_changed)
         self.observe('flow_changed', self.handle_flow_changed)
 
-        self.__temp_sensor = Temperature()
-        self.__temp_sensor.start()
-        self.__flow_sensor = FlowMeter()
-        self.__flow_sensor.start()
+        for key in Settings.instance.sensors._fields:
+            config = getattr(Settings.instance.sensors, key)
+            units = getattr(Settings.instance.units, key)
+            sensor = SensorFactory.factory(key, config, units)
+            sensor.start();
+            self.__sensors.append(sensor)
 
     def __del__(self):
         print('Destructor called, cleaning up')
@@ -97,8 +100,8 @@ class Controller(Observer):
     def cleanup(self):
         print("Cleanup called")
 
-        if self.__temp_sensor is not None:
-            self.__temp_sensor.stop()
+        for sensor in self.__sensors:
+            sensor.stop()
 
         if sys.platform == 'linux' and self.__gpio_is_setup:
             print("Cleaning up GPIO")

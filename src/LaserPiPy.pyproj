@@ -45,6 +45,9 @@
     <Compile Include="Sensors\ISensor.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sensors\SensorFactory.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sensors\Temperature.py">
       <SubType>Code</SubType>
     </Compile>

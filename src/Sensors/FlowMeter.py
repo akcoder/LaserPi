@@ -1,7 +1,7 @@
 import sys
 import time
 from threading import Thread
-from Helpers import Settings, PerpetualTimer
+from Helpers import PerpetualTimer
 from Helpers.Observer import Event
 from Sensors import ISensor
 
@@ -16,15 +16,16 @@ class FlowMeter(ISensor):
         "imperial": 0.26417287472922
     }
 
-    def __init__(self):
+    def __init__(self, config, units):
         print('Setting up %s' % __name__)
 
         self.__count = 0
         self.__flow_rate = -255
         self.__time_start = time.time()
         self.__time_delta = 0
-        self.__correction_factor = Settings.instance.sensors.flow.correction_factor
-        self.__multiplier = self.__conversion[Settings.instance.units.flow]
+        self.__pin = config.pin
+        self.__correction_factor = config.correction_factor
+        self.__multiplier = self.__conversion[units]
 
         if sys.platform == 'linux':
             self.__gpio_thread = Thread(target=self.__setup_gpio)
@@ -32,10 +33,9 @@ class FlowMeter(ISensor):
             self.__gpio_thread.start()
 
     def __setup_gpio(self) -> None:
-        pin = Settings.instance.pins.input.flow
-        print("Setting up FlowMeter GPIO(%d)" % pin)
-        GPIO.setup(pin, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-        GPIO.add_event_detect(pin, GPIO.RISING, callback=self.count_pulse, bouncetime=1)
+        print("Setting up FlowMeter GPIO(%d)" % self.__pin)
+        GPIO.setup(self.__pin, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+        GPIO.add_event_detect(self.__pin, GPIO.RISING, callback=self.count_pulse, bouncetime=1)
 
     def start(self) -> None:
         pass

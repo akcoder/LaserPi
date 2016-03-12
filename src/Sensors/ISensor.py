@@ -9,5 +9,3 @@ class ISensor(metaclass=ABCMeta):
     @abstractmethod
     def stop(self):
         pass
-
-

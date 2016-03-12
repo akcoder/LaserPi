@@ -23,7 +23,8 @@
       }
     },
     "flow": {
-      "correction_factor": 7.5
+      "correction_factor": 7.5,
+      "pin": 25
     }
   },
   "pins": {
