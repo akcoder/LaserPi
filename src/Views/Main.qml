@@ -18,9 +18,7 @@ Rectangle {
 
     Column {
         spacing: 5
-        //anchors.fill: parent
 		anchors.top: parent.top
-		//anchors.topMargin: 10
 		anchors.left: parent.left
 		anchors.leftMargin: 10
 
@@ -31,13 +29,11 @@ Rectangle {
                 text: "Working"
                 width: column1Width
                 height: parent.height
-                verticalAlignment: Text.AlignVCenter
             }
 
             Label {
                 height: parent.height
                 text: viewModel.working ? "Yes" : "No"
-                verticalAlignment: Text.AlignVCenter
             }
         }
 
@@ -49,7 +45,6 @@ Rectangle {
                 text: "Chiller"
                 height: parent.height
                 width: column1Width
-                verticalAlignment: Text.AlignVCenter
             }
 
             Button {
@@ -68,7 +63,6 @@ Rectangle {
                 text: "Exhaust"
                 height: parent.height
                 width: column1Width
-                verticalAlignment: Text.AlignVCenter
             }
 
             Button {
@@ -87,7 +81,6 @@ Rectangle {
                 text: "Air"
                 height: parent.height
                 width: column1Width
-                verticalAlignment: Text.AlignVCenter
             }
 
             Button {
@@ -103,7 +96,6 @@ Rectangle {
 		id: sensors
         spacing: 5
 		anchors.top: parent.top
-		anchors.topMargin: 10
 		anchors.right: parent.right
 		anchors.rightMargin: 10
 
@@ -115,7 +107,7 @@ Rectangle {
 				text: Qt.formatDateTime(new Date(), "h:mm AP MMM d, yyyy")
 				width: 235
 				horizontalAlignment: Text.AlignRight
-                //height: parent.height
+                height: parent.height
 			}
 
 			Timer {
@@ -138,14 +130,12 @@ Rectangle {
                 text: "Flow Rate"
                 height: parent.height
                 width: column2Width
-                verticalAlignment: Text.AlignVCenter
             }
 
             Label {
                 text: [viewModel.flow_rate, viewModel.flow_rate_units].join(' ')
                 height: parent.height
                 //width: column2_2Width
-                verticalAlignment: Text.AlignVCenter
 				horizontalAlignment: Text.AlignRight
             }
 		}
