@@ -16,7 +16,7 @@ the fumes. Have you ever left the air assist box checked by accident and had you
 I have, many times and I have to pause my machine and unplug the air assist.
 
 ## How does it work?
-The brains of the operation is a Raspbery Pi with the code being Python using the QT GUI framework. Data is acquired
+The brains of the operation is a Raspberry Pi with the code being Python using the QT GUI framework. Data is acquired
 from the sensors, and GPIO pins on the Pi, and decisions are made.
 
 ###Sensors
@@ -27,5 +27,5 @@ from the sensors, and GPIO pins on the Pi, and decisions are made.
 *  [Logic Level Converter - Bi-Directional](https://www.sparkfun.com/products/12009)
 *  [Fotek SSR-25 DA Relays](http://www.amazon.com/dp/B004HZN628)
 
-Here is a work in progress screenshot of LaserPi
-![Screenshot](Documentation/screenshot1.png "Work in progress")
+Here is a work in progress screen shot of LaserPi
+![Screenshot](docs/screenshot1.png "Work in progress")

@@ -6,7 +6,7 @@
         "id": "28-000006094026",
         "units": "metric",
         "thresholds": {
-          "red": 25,
+          "red": 24,
           "yellow": 21
         }
       },
@@ -15,7 +15,7 @@
         "id": "28-000006087d0b",
         "units": "metric",
         "thresholds": {
-          "red": 24,
+          "red": 25,
           "yellow": 20
         }
       }
