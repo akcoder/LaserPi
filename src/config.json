@@ -25,7 +25,11 @@
         "text": "Flow Rate",
         "units": "metric",
         "correction_factor": 7.5,
-        "pin": 25
+        "pin": 25,
+        "thresholds": {
+          "red": 1,
+          "yellow": 2
+        }
       }
     }
   },

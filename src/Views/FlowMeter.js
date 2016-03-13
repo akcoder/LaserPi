@@ -37,7 +37,7 @@ function addSensors(component, container, sensors, changeEvent) {
 
 function getColor(value, thresholds) {
     for (var key in thresholds) {
-        if (value >= thresholds[key]) {
+        if (value <= thresholds[key]) {
             return key;
         }
     }
