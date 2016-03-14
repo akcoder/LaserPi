@@ -59,14 +59,10 @@ class Controller(Observer):
         self.__logger.info("Setting up GPIO")
         GPIO.setmode(GPIO.BCM)
 
-        for key in Settings.instance.buttons._fields:
-            config = getattr(Settings.instance.buttons, key)
-            self.__logger.debug("Setting up {0} (GPIO {1}) for output".format(config.text, config.pin))
-            GPIO.setup(config.pin, GPIO.OUT)
-
-        GPIO.setup(Settings.instance.pins.output.exhaust, GPIO.OUT)
-        GPIO.setup(Settings.instance.pins.output.chiller, GPIO.OUT)
-        GPIO.setup(Settings.instance.pins.output.airOutput, GPIO.OUT)
+        for key in Settings.instance.pins.output._fields:
+            pin = getattr(Settings.instance.pins.output, key)
+            self.__logger.debug("Setting GPIO {0} for output".format(pin))
+            GPIO.setup(pin, GPIO.OUT)
 
         GPIO.setup(Settings.instance.pins.input.working, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(Settings.instance.pins.input.working, GPIO.BOTH, callback=self.working_changed, bouncetime=25)
