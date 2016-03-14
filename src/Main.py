@@ -1,4 +1,5 @@
 """Main"""
+import logging
 import sys
 import signal
 #import ptvsd
@@ -11,9 +12,26 @@ from Views import MainView
 from Controller import Controller
 from Helpers.Settings import Settings
 
+def setup_logging():
+    logger = logging.getLogger('')
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+    logger.debug('debug message')
+    logger.info('info message')
+    logger.warn('warn message')
+    logger.error('error message')
+    logger.critical('critical message')
+
 def main():
     """Main"""
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    setup_logging()
 
     # Create Qt application and the QDeclarative view
     app = QApplication(sys.argv)

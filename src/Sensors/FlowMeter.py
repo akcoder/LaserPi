@@ -1,3 +1,4 @@
+import logging
 import sys
 import time
 from threading import Thread
@@ -16,8 +17,9 @@ class FlowMeter(ISensor):
         "imperial": 0.26417287472922
     }
 
+    __logger = logging.getLogger(__name__)
     def __init__(self, config):
-        print('Setting up %s' % __name__)
+        self.__logger.info('Setting up %s' % __name__)
 
         self.__count = 0
         self.__flow_rate = -255
@@ -44,7 +46,7 @@ class FlowMeter(ISensor):
             self.__gpio_thread.start()
 
     def __setup_gpio(self) -> None:
-        print("Setting up FlowMeter GPIO(%d)" % self.__pin)
+        self.__logger.info("Setting up FlowMeter GPIO(%d)" % self.__pin)
         GPIO.setup(self.__pin, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
         GPIO.add_event_detect(self.__pin, GPIO.RISING, callback=self.count_pulse, bouncetime=1)
 

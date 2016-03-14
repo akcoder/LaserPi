@@ -1,3 +1,4 @@
+import logging
 import sys
 from PySide.QtDeclarative import QDeclarativeView
 from PySide.QtCore import QUrl, Qt
@@ -7,6 +8,7 @@ from Helpers import Settings
 class MainView(QDeclarativeView):
     """Main view"""
 
+    __logger = logging.getLogger(__name__)
     def __init__(self, viewModel: MainViewModel):
         super().__init__()
         self.rootContext().setContextProperty('viewModel', viewModel)
@@ -20,4 +22,4 @@ class MainView(QDeclarativeView):
             self.setCursor(Qt.BlankCursor)
 
     def __del__(self):
-        print("MainView destructor")
+        self.__logger.info("MainView destructor")

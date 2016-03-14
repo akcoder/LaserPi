@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import logging
 import random
 from Helpers.PerpetualTimer import PerpetualTimer
 from Helpers.Observer import Event
@@ -16,9 +17,9 @@ class Temperature(ISensor):
         "kelvin": 2
     }
     __updateInterval = 0.25 if sys.platform == 'linux' else 2
-
+    __logger = logging.getLogger(__name__)
     def __init__(self, config):
-        print('Setting up %s' % __name__)
+        self.__logger.info('Setting up %s', __name__)
         self.__sensors = config
         self.__temp_sensors = {}
 
@@ -32,7 +33,7 @@ class Temperature(ISensor):
 
     def stop(self) -> None:
         if self.__sensor_timer is not None:
-            print("Canceling sensor timer")
+            self.__logger.info("Canceling sensor timer")
             self.__sensor_timer.cancel()
 
     def __poll_sensors(self) -> None:

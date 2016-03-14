@@ -1,6 +1,7 @@
 """The glue between the view and viewModel"""
 
 import os
+import logging
 import sys
 import threading
 from threading import Thread, Timer
@@ -18,9 +19,9 @@ if sys.platform == 'linux':
 class Controller(Observer):
     """The glue between the view and viewModel"""
 
+    __logger = logging.getLogger(__name__)
     def __init__(self, viewModel: MainViewModel):
         Observer.__init__(self)
-
         self.__view_model = viewModel
         self.__gpio_is_setup = False
         self.__exhaust_timer = None
@@ -51,12 +52,17 @@ class Controller(Observer):
             self.__sensors.append(sensor)
 
     def __del__(self):
-        print('Destructor called, cleaning up')
+        self.__logger.info('Destructor called, cleaning up')
         self.cleanup()
 
     def __setup_gpio(self) -> None:
-        print("Setting up GPIO")
+        self.__logger.info("Setting up GPIO")
         GPIO.setmode(GPIO.BCM)
+
+        for key in Settings.instance.buttons._fields:
+            config = getattr(Settings.instance.buttons, key)
+            self.__logger.debug("Setting up {0} (GPIO {1}) for output".format(config.text, config.pin))
+            GPIO.setup(config.pin, GPIO.OUT)
 
         GPIO.setup(Settings.instance.pins.output.exhaust, GPIO.OUT)
         GPIO.setup(Settings.instance.pins.output.chiller, GPIO.OUT)
@@ -71,12 +77,12 @@ class Controller(Observer):
         self.__gpio_is_setup = True
 
     def close(self):
-        print("Close called")
+        self.__logger.info("Close called")
         self.cleanup()
-        print("After cleanup")
+        self.__logger.info("After cleanup")
         QtCore.QCoreApplication.instance().quit()
 
-        print("OS exit")
+        self.__logger.info("OS exit")
         os._exit(0)
         raise SystemExit
 
@@ -88,27 +94,26 @@ class Controller(Observer):
                 import subprocess
                 process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
                 output = process.communicate()[0]
-                print(output)
+                self.__logger.info(output)
             except Exception as ex:
-                print(ex)
-                print("Unable to shutdown")
+                self.__logger.error(ex)
+                self.__logger.error("Unable to shutdown")
                 sys.exit()
         else:
             sys.exit()
 
     def cleanup(self):
-        print("Cleanup called")
+        self.__logger.info("Cleanup called")
 
         for sensor in self.__sensors:
             sensor.stop()
 
         if sys.platform == 'linux' and self.__gpio_is_setup:
-            print("Cleaning up GPIO")
+            self.__logger.info("Cleaning up GPIO")
             GPIO.cleanup()
 
     def handle_temp_changed(self, name: str, value: float) -> None:
         self.__view_model.onTemperatureChanged.emit(name, value)
-        #print(name, value)
 
     def handle_flow_changed(self, name: str, value: float) -> None:
         self.__view_model.onFlowRateChanged.emit(name, value)
@@ -123,12 +128,12 @@ class Controller(Observer):
     def air_trigger_changed(self, channel=None):
         if  GPIO.input(channel) == GPIO.HIGH:
             if  self._states[channel] == GPIO.LOW:
-                print("Turning air on because triggered")
+                self.__logger.debug("Turning air on because triggered")
                 self.__view_model.air = True
 
             self._states[channel] = GPIO.HIGH
         elif self._states[channel] == GPIO.HIGH and self.__view_model.air:
-            print("Turning air off because triggered")
+            self.__logger.debug("Turning air off because triggered")
             self.__view_model.air = False
             self._states[channel] = GPIO.LOW
 
@@ -136,13 +141,13 @@ class Controller(Observer):
         self.set_pin_state(Settings.instance.pins.output.airOutput, state)
 
     def set_pin_state(self, pin: int, state: bool) -> None:
-        print("Setting GPIO {0} to {1}".format(pin, "HIGH" if state else "LOW"))
+        self.__logger.debug("Setting GPIO {0} to {1}".format(pin, "HIGH" if state else "LOW"))
         GPIO.output(pin, GPIO.HIGH if state else GPIO.LOW)
 
     def working_changed(self, channel):
         if  GPIO.input(channel) == GPIO.HIGH:
             if  self._states[channel] == GPIO.LOW:
-                print("Laser is working")
+                self.__logger.info("Laser is working")
                 self.__view_model.working = True
                 self.turn_exhaust_on()
 
@@ -156,19 +161,19 @@ class Controller(Observer):
                 assert self.__exhaust_timer is None, "Exhaust timer should have been set to null!"
 
                 seconds = Settings.instance.exhaust_time_after_finished
-                print("Setting exhaust off timer for %d seconds" % seconds)
+                self.__logger.info("Setting exhaust off timer for %d seconds" % seconds)
                 self.__exhaust_timer = Timer(seconds, self.turn_exhaust_off)
                 self.__exhaust_timer.start()
                 self.__view_model.working = False
             self._states[channel] = GPIO.LOW
 
     def turn_exhaust_on(self):
-        print("Turning exhaust fan on")
+        self.__logger.debug("Turning exhaust fan on")
         self.__view_model.exhaust = True
         self.set_pin_state(Settings.instance.pins.output.exhaust, GPIO.HIGH)
 
     def turn_exhaust_off(self):
-        print("Turning exhaust fan off")
+        self.__logger.debug("Turning exhaust fan off")
         self.__view_model.exhaust = False
         self.__exhaust_timer = None
         self.set_pin_state(Settings.instance.pins.output.exhaust, GPIO.LOW)
