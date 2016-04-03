@@ -21,7 +21,7 @@
       }
     },
     "flow": {
-      "foo": {
+      "sensor1": {
         "text": "Flow Rate",
         "units": "metric",
         "correction_factor": 7.5,
@@ -36,9 +36,7 @@
   "pins": {
     "input": {
       "working": 23,
-      "airTrigger": 24,
-      "flow": 25,
-      "temperature": 4
+      "airTrigger": 24
     },
     "output": {
       "chiller": 6,
