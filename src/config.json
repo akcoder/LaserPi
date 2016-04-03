@@ -7,7 +7,7 @@
         "units": "metric",
         "thresholds": {
           "red": 24,
-          "yellow": 21
+          "yellow": 20
         }
       },
       "outlet": {
@@ -16,7 +16,7 @@
         "units": "metric",
         "thresholds": {
           "red": 25,
-          "yellow": 20
+          "yellow": 21
         }
       }
     },
