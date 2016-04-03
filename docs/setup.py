@@ -53,7 +53,7 @@ def disable_screen_blanking():
     inplace_change(path, '#xserver-command=X', 'xserver-command=X -s 0 -dpms')
 
 def enable_one_wire():
-    to_add = 'dtoverlay=w1-gpio'
+    to_add = 'dtoverlay=w1-gpio,gpiopin=26'
     path = os.path.join(base_dir, 'boot', 'config.txt')
     if not to_add in open(path).read():
         print('Appending "{0}" to "{1}"'.format(to_add, path))
