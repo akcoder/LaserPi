@@ -594,9 +594,9 @@ F 3 "" H 6150 1900 50  0000 C CNN
 	1    6150 1900
 	-1   0    0    1   
 $EndComp
-Text GLabel 6050 1900 3    60   Input ~ 0
-EP1
 Text GLabel 5850 1900 3    60   Input ~ 0
+EP1
+Text GLabel 5950 1900 3    60   Input ~ 0
 LP1
 $Comp
 L BSS138 Q1
@@ -761,7 +761,7 @@ F 3 "" H 2950 3350 50  0000 C CNN
 	1    2950 3350
 	1    0    0    -1  
 $EndComp
-Text GLabel 5950 1900 3    60   Input ~ 0
+Text GLabel 6050 1900 3    60   Input ~ 0
 LP2
 Text GLabel 3350 2950 2    60   Input ~ 0
 LP1
@@ -820,7 +820,9 @@ Wire Wire Line
 Wire Wire Line
 	5100 6800 5150 6800
 Wire Wire Line
-	8350 1350 8350 1550
+	8350 1350 8350 1450
+Wire Wire Line
+	8350 1450 8350 1550
 Connection ~ 8350 1450
 Wire Wire Line
 	8350 1350 8250 1350
