@@ -24,7 +24,7 @@
       "sensor1": {
         "text": "Flow Rate",
         "units": "metric",
-        "correction_factor": 7.5,
+        "correction_factor": 4.5,
         "pin": 25,
         "thresholds": {
           "red": 1,
